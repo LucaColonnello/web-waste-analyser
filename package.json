@@ -1,0 +1,40 @@
+{
+  "name": "web-waste-analyser",
+  "description": "Waste analysis tool for the web, helps you understand where all the unused code comes from from a Google Chrome Dev Tools coverage export.",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
+    "eslint": "^7.27.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard-with-typescript": "^20.0.0",
+    "eslint-plugin-import": "2",
+    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-node": "11",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-promise": "4",
+    "jest": "^27.0.2",
+    "prettier": "2.3.0",
+    "ts-jest": "^27.0.1",
+    "typescript": "^4.3.2"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "build": "tsc --project tsconfig.production.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucaColonnello/web-waste-analyser.git"
+  },
+  "author": "Luca Colonnello <luca.colonnello91@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LucaColonnello/web-waste-analyser/issues"
+  },
+  "homepage": "https://github.com/LucaColonnello/web-waste-analyser#readme"
+}
