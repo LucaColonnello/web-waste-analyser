@@ -1,11 +1,28 @@
-import type { CoverageExportData, LineAndColumn } from './types';
+import type {
+  CoverageExportData,
+  CoverageExportRange,
+  UnusedLineAndColumn,
+} from './types';
 
+/**
+ * @class CoverageExportFile
+ * @description
+ * CoverageExportFile objects represent items of the Chrome's Coverage export,
+ * containing unused ranges, the text (content) and the url of an asset file.
+ *
+ * Additionally, this model class takes also care of calculating
+ * the unused lines and columns based on the unused ranges.
+ */
 export default class CoverageExportFile {
-  private linesCache: LineAndColumn[] | null = null;
+  /** Used as a cache to memoize the unused chars */
+  private unusedCache: UnusedLineAndColumn[] | null = null;
 
-  public constructor(private readonly coverageExport: CoverageExportData) {}
+  public constructor(
+    /** Contains the coverage export data */
+    private readonly coverageExport: CoverageExportData
+  ) {}
 
-  private calculateLines(): LineAndColumn[] {
+  private calculateUnusedFromRanges(): UnusedLineAndColumn[] {
     const { ranges, text: code } = this.coverageExport;
     const rangesList = ranges.slice(0);
     const lines = [];
@@ -43,12 +60,44 @@ export default class CoverageExportFile {
     return lines;
   }
 
-  get lines(): LineAndColumn[] {
-    if (this.linesCache !== null) {
-      return this.linesCache;
+  /**
+   * @property {UnusedLineAndColumn[]} unused
+   * @description
+   * The unused chars from the file content, rappresented as lines and columns.
+   */
+  get unused(): UnusedLineAndColumn[] {
+    if (this.unusedCache !== null) {
+      return this.unusedCache;
     }
 
-    this.linesCache = this.calculateLines();
-    return this.linesCache;
+    this.unusedCache = this.calculateUnusedFromRanges();
+    return this.unusedCache;
+  }
+
+  /**
+   * @property {CoverageExportRange[]} ranges
+   * @description
+   * The unused ranges, from Chrome's Coverage export data.
+   */
+  get ranges(): CoverageExportRange[] {
+    return this.coverageExport.ranges;
+  }
+
+  /**
+   * @property {string} text
+   * @description
+   * The file content, from Chrome's Coverage export data.
+   */
+  get text(): string {
+    return this.coverageExport.text;
+  }
+
+  /**
+   * @property {string} url
+   * @description
+   * The file url, from Chrome's Coverage export data.
+   */
+  get url(): string {
+    return this.coverageExport.url;
   }
 }
