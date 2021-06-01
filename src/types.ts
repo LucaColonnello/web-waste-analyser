@@ -72,8 +72,8 @@ export interface SourceMapLoader {
 
   /**
    * @method load
-   * @param {string} sourceMapUrl
-   * @param {CoverageExportFile} coverageExportFile
+   * @param {string} sourceMapUrl The source map url to test against
+   * @param {CoverageExportFile} coverageExportFile An item of the Chrome's Coverage export
    * @description
    * The load method is invoked only if the test function returns true
    * and it's used to load the source map based on the provided source map url.
@@ -94,10 +94,35 @@ export interface SourceMapLoader {
    * }
    * ```
    *
-   * @returns {Promise<string>}
+   * @returns {Promise<string | null>}
    */
   load: (
     sourceMapUrl: string,
     coverageExportFile: CoverageExportFile
-  ) => Promise<string>;
+  ) => Promise<string | null>;
 }
+
+/**
+ * @interface ExtractedSourceMap
+ * @description
+ * This interface represents an extracted source map.
+ */
+export interface ExtractedSourceMap {
+  /** The source map url, as parsed from the file's final comment */
+  sourceMapUrl: string;
+
+  /** The source map content, extracted by the loaders */
+  sourceMapContent: string | null;
+}
+
+/**
+ * @type SourceMapStore
+ * @description
+ * This type represents a store of extracted source maps,
+ * contained in a Map data structure.
+ * Each source map is referenced by the url of the Chrome's Coverage export
+ * file assets it is relevant to.
+ *
+ * Urls (keys) can be found in instances of CoverageExportFile.
+ */
+export type SourceMapStore = Map<string, ExtractedSourceMap>;
