@@ -1,3 +1,8 @@
+export interface LineAndColumn {
+  line: number;
+  column: number;
+}
+
 export interface CoverageExportRange {
   start: number;
   end: number;
