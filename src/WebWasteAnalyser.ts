@@ -1,10 +1,10 @@
-import CoverageExportFile from './CoverageExportFile';
+import CoverageExportItemModel from './models/CoverageExportItemModel';
 import type { CoverageExportData } from './types';
 
 class WebWasteAnalyser {
-  public analyse(coverageExportData: CoverageExportData[]): void {
-    const coverageExportFiles = coverageExportData.map(
-      (data) => new CoverageExportFile(data)
+  public analyse(coverageExport: CoverageExportData[]): void {
+    const coverageExportItems = coverageExport.map(
+      (data) => new CoverageExportItemModel(data)
     );
   }
 }

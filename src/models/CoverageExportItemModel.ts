@@ -2,18 +2,18 @@ import type {
   CoverageExportData,
   CoverageExportRange,
   UnusedLineAndColumn,
-} from './types';
+} from '../types';
 
 /**
- * @class CoverageExportFile
+ * @class CoverageExportItemModel
  * @description
- * CoverageExportFile objects represent items of the Chrome's Coverage export,
+ * CoverageExportItemModel objects represent items of the Chrome's Coverage export,
  * containing unused ranges, the text (content) and the url of an asset file.
  *
  * Additionally, this model class takes also care of calculating
  * the unused lines and columns based on the unused ranges.
  */
-export default class CoverageExportFile {
+export default class CoverageExportItemModel implements CoverageExportData {
   /** Used as a cache to memoize the unused chars */
   private unusedCache: UnusedLineAndColumn[] | null = null;
 

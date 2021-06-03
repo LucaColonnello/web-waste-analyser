@@ -1,9 +1,9 @@
-import CoverageExportFile from '../CoverageExportFile';
+import CoverageExportItemModel from '../CoverageExportItemModel';
 
-describe('CoverageExportFile', () => {
+describe('CoverageExportItemModel', () => {
   describe('get lines', () => {
     it('returns lines and columns with valid ranges', () => {
-      const instance = new CoverageExportFile({
+      const instance = new CoverageExportItemModel({
         text: `const h = 'hello';\nconst w = 'world';\n`,
         ranges: [
           { start: 11, end: 17 },
@@ -28,7 +28,7 @@ describe('CoverageExportFile', () => {
     });
 
     it('deals with 0-based ranges correctly on multiline text', () => {
-      const instance = new CoverageExportFile({
+      const instance = new CoverageExportItemModel({
         text: `hel\nlo\n`,
         ranges: [
           { start: 0, end: 17 },
@@ -47,7 +47,7 @@ describe('CoverageExportFile', () => {
     });
 
     it('returns empty array with invalid ranges', () => {
-      const instance = new CoverageExportFile({
+      const instance = new CoverageExportItemModel({
         text: `const h = 'hello';\nconst w = 'world';\n`,
         ranges: [{ start: 100, end: 200 }],
         url: 'https://www.fakeurl.com/file.js',
@@ -60,7 +60,7 @@ describe('CoverageExportFile', () => {
   describe('get ranges', () => {
     it('returns ranges from export data', () => {
       expect(
-        new CoverageExportFile({
+        new CoverageExportItemModel({
           text: `const h = 'hello';\nconst w = 'world';\n`,
           ranges: [
             { start: 11, end: 17 },
@@ -78,7 +78,7 @@ describe('CoverageExportFile', () => {
   describe('get text', () => {
     it('returns text from export data', () => {
       expect(
-        new CoverageExportFile({
+        new CoverageExportItemModel({
           text: `const h = 'hello';\nconst w = 'world';\n`,
           ranges: [
             { start: 11, end: 17 },
@@ -93,7 +93,7 @@ describe('CoverageExportFile', () => {
   describe('get url', () => {
     it('returns url from export data', () => {
       expect(
-        new CoverageExportFile({
+        new CoverageExportItemModel({
           text: `const h = 'hello';\nconst w = 'world';\n`,
           ranges: [
             { start: 11, end: 17 },

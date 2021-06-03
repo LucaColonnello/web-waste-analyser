@@ -1,28 +1,28 @@
-import SourceMapLoaderNotFoundError from './errors/SourceMapLoaderNotFoundError';
+import SourceMapLoaderNotFoundError from '../errors/SourceMapLoaderNotFoundError';
+import parseSourceMapComment from './parseSourceMapComment';
 
-import type CoverageExportFile from './CoverageExportFile';
 import type {
+  CoverageExportData,
   ExtractedSourceMap,
   SourceMapLoader,
   SourceMapStore,
-} from './types';
-import parseSourceMapComment from './parseSourceMapComment';
+} from '../types';
 
 /**
  * @class SourceMapExtractor
  * @description
  * This class takes care of extracting and loading the source map
- * for a given collection of Chrome's Coverage export files.
+ * for a given collection of Chrome's Coverage export items.
  *
  * Using a loaders plugin system, this class delegates the actual
  * loading stratgey to the provided loaders, allowing high extensibility.
  *
- * Loaders run in parallel for all files. If multiple loaders are installed,
+ * Loaders run in parallel for all items. If multiple loaders are installed,
  * Promise.race is used to solve concurrency among loaders
  * (i.e. the first loader to return a valid result, takes presedence).
  *
  * Loaders are called only if their test method returns truthy value
- * on a given source map url for any file.
+ * on a given source map url for any item.
  *
  * This system allows for flexibility, running multiple loaders at the same time
  * as well as testing whether a loader can handle or not a type of url,
@@ -41,11 +41,11 @@ export default class SourceMapExtractor {
   }
 
   private async extractSourceMap(
-    coverageExportFile: CoverageExportFile
+    coverageExportItem: CoverageExportData
   ): Promise<ExtractedSourceMap> {
-    const sourceMapUrl = parseSourceMapComment(coverageExportFile.text);
+    const sourceMapUrl = parseSourceMapComment(coverageExportItem.text);
     const usableLoaders = this.loaders.filter((loader) =>
-      loader.test(sourceMapUrl, coverageExportFile)
+      loader.test(sourceMapUrl, coverageExportItem)
     );
 
     const sourceMapContent =
@@ -53,7 +53,7 @@ export default class SourceMapExtractor {
         ? await Promise.race(
             usableLoaders.map(
               async (loader) =>
-                await loader.load(sourceMapUrl, coverageExportFile)
+                await loader.load(sourceMapUrl, coverageExportItem)
             )
           )
         : null;
@@ -66,25 +66,25 @@ export default class SourceMapExtractor {
 
   /**
    * @method extract
-   * @param {CoverageExportFile[]} coverageExportFiles Items of the Chrome's Coverage export
+   * @param {CoverageExportData[]} coverageExportItems Items of the Chrome's Coverage export
    * @description
    * This method extracts source maps for a given collection of
-   * Chrome's Coverage export files using the installed loaders.
+   * Chrome's Coverage export items using the installed loaders.
    * Extracted source maps are returned in a Map store.
    *
    * @return {Promise<SourceMapStore | null>}
    */
   public async extract(
-    coverageExportFiles: CoverageExportFile[]
+    coverageExportItems: CoverageExportData[]
   ): Promise<SourceMapStore | null> {
     const sourceMapStore: SourceMapStore = new Map();
     await Promise.all(
-      coverageExportFiles.map(async (coverageExportFile) => {
+      coverageExportItems.map(async (coverageExportItem) => {
         const extractedSourceMap = await this.extractSourceMap(
-          coverageExportFile
+          coverageExportItem
         );
 
-        sourceMapStore.set(coverageExportFile.url, extractedSourceMap);
+        sourceMapStore.set(coverageExportItem.url, extractedSourceMap);
       })
     );
 
